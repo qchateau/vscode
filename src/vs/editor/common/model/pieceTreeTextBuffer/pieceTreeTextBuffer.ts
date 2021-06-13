@@ -290,7 +290,12 @@ export class PieceTreeTextBuffer extends Disposable implements ITextBuffer {
 		operations.sort(PieceTreeTextBuffer._sortOpsAscending);
 
 		let hasTouchingRanges = false;
-		for (let i = 0, count = operations.length - 1; i < count; i++) {
+		for (let i = 0; i < operations.length - 1; i++) {
+			if (operations[i].range.equalsRange(operations[i + 1].range) && operations[i].text === operations[i + 1].text) {
+				operations.splice(i--, 1);
+				continue;
+			}
+
 			let rangeEnd = operations[i].range.getEndPosition();
 			let nextRangeStart = operations[i + 1].range.getStartPosition();
 
